@@ -1,45 +1,59 @@
 import { Link } from "react-router";
+import ReadMoreButton from "./ReadMoreButton";
 
 const BlogCard = ({ data }) => {
   return (
-    <>
-      <Link
-        to={`/blogs/${data.id}`}
-        className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
-      >
-        <div>
-          <img className="rounded-t-lg" src={data.thumbnail} alt="" />
-        </div>
-        <div className="p-5">
-          <div>
-            <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-              {data.title}
-            </h5>
-          </div>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-            {data.description.substring(0, 40)}...
-          </p>
-          <div className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+    <Link
+      to={`/blogs/${data.id}`}
+      className="group block bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 overflow-hidden hover:-translate-y-1"
+    >
+      {/* Image Container */}
+      <div className="relative overflow-hidden">
+        <img 
+          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" 
+          src={data.thumbnail} 
+          alt={data.title}
+          loading="lazy"
+        />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+
+      {/* Content Container */}
+      <div className="p-6">
+        {/* Title */}
+        <h3 className="mb-3 text-xl font-bold text-gray-900 dark:text-white line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+          {data.title}
+        </h3>
+
+        {/* Description */}
+        <p className="mb-4 text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">
+          {data.description}
+        </p>
+
+        {/* Read More Button */}
+        {/* <div className="flex items-center justify-between">
+          <span className="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors duration-200">
             Read more
             <svg
-              className="rtl:rotate-180 w-3.5 h-3.5 ms-2"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1"
               fill="none"
-              viewBox="0 0 14 10"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
               <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
               />
             </svg>
-          </div>
-        </div>
-      </Link>
-    </>
+          </span>
+        </div> */}
+
+        <ReadMoreButton />
+      </div>
+    </Link>
   );
 };
 

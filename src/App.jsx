@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import Home from "./pages/Home";
 import BlogDetails from "./components/home/BlogDetails";
+import EcommerceLanding from "./pages/EcommerceLanding";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<Home />} />
+           <Route path="/landing" element={<EcommerceLanding />} />
           <Route path="/blogs/:id" element={<BlogDetails />} />
         </Routes>
       </BrowserRouter>
