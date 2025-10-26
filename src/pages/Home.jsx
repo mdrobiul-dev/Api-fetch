@@ -3,11 +3,13 @@ import BlogCard from "../components/home/BlogCard";
 import { blogservices } from "../services/api";
 import Loading from "../components/loading";
 import Button from "../components/Button";
+import { useNavigate } from "react-router";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
 
   useEffect(() => {
     try {
@@ -50,9 +52,9 @@ const Home = () => {
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
             Our Blog
           </h1>
-          <div className="float-right">
-            <Button onc>Home</Button>
-          </div>
+        <div className="float-right">
+  <Button to="/landing">Home</Button>
+</div>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Discover the latest articles, insights, and stories from our
             community
