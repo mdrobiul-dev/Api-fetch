@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import BlogDetails from "./components/home/BlogDetails";
 import EcommerceLanding from "./pages/EcommerceLanding";
 import RegistrationForm from "./pages/RegistrationForm";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           {/* <Route index element={<Home />} /> */}
            <Route index element={<RegistrationForm />} />
            <Route path="/landing" element={<EcommerceLanding />} />
+           <Route path="/login" element={<LoginPage />} />
           <Route path="/blogs/:id" element={<BlogDetails />} />
         </Routes>
       </BrowserRouter>

@@ -38,5 +38,11 @@ export const authservices = {
   registration : async(userData) => {
     const res = await api.post("/users/register", userData)
     return res.data;
+  },
+  login : async (userData) => {
+    console.log(userData);
+    
+       const res = await api.post("/users/login", userData)
+       return res.data
   }
 }
