@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://dummyjson.com",
+  baseURL: "https://api.freeapi.app/api/v1",
   headers: {
     "Conten-Type": "application/json",
   },
@@ -9,9 +9,9 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (confiq) => {
-    const token = "tokenasdlkfjsd asdvalj;l asdjgds";
+    const token = undefined;
     console.log(token);
-
+    0;
     if (token) {
       confiq.headers.Authorization = token;
     }
@@ -33,3 +33,10 @@ export const blogservices = {
     return res.data;
   },
 };
+
+export const authservices = {
+  registration : async(userData) => {
+    const res = await api.post("/users/register", userData)
+    return res.data;
+  }
+}
