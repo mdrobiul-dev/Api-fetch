@@ -1,10 +1,10 @@
-import { BrowserRouter, Route, Routes } from "react-router";
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import BlogDetails from "./components/home/BlogDetails";
 import EcommerceLanding from "./pages/EcommerceLanding";
 import RegistrationForm from "./pages/RegistrationForm";
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 function App() {
@@ -12,13 +12,21 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          {/* <Route index element={<Home />} /> */}
-           <Route index element={<RegistrationForm />} />
-             <Route path="/" element={<RegistrationForm />} />
-           <Route path="/landing" element={<EcommerceLanding />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-           <Route path="/login" element={<LoginPage />} />
+          <Route index element={<RegistrationForm />} />
+          <Route path="/" element={<RegistrationForm />} />
+          <Route path="/landing" element={<EcommerceLanding />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/blogs/:id" element={<BlogDetails />} />
+          
+          {/* Protected Routes */}
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
         </Routes>
       </BrowserRouter>
     </>
@@ -26,5 +34,4 @@ function App() {
 }
 
 export default App;
-
 

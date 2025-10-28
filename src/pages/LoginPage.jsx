@@ -177,6 +177,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-//gisytez
-//Pa$$w0rd!

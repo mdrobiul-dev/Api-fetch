@@ -93,12 +93,12 @@ api.interceptors.response.use(
 );
 
 const logoutUser = () => {
-  // Clear localStorage
+
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("user");
   
-  // Clear cookies
+
   deleteCookie("accessToken");
   deleteCookie("refreshToken");
 };
