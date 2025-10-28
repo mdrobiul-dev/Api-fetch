@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { authservices } from '../services/api'; 
+import { Link, useNavigate } from 'react-router';
 
 const RegistrationFormMinimal = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [apiError, setApiError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const navigate = useNavigate()
   
-  const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
-  const password = watch('password');
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
@@ -35,7 +37,10 @@ const RegistrationFormMinimal = () => {
     
       setSuccessMessage('Account created successfully! You can now sign in.');
       
-    
+      setTimeout(() => {
+        navigate("/login")
+      },1000)
+      
       reset();
       
     } catch (error) {
@@ -188,9 +193,9 @@ const RegistrationFormMinimal = () => {
         <div className="mt-8 text-center">
           <p className="text-gray-600 text-sm">
             Already have an account?{' '}
-            <a href="#" className="text-gray-900 font-medium underline hover:text-gray-700">
+            <Link to="/login" className="text-gray-900 font-medium underline hover:text-gray-700">
               Sign In
-            </a>
+            </Link>
           </p>
         </div>
       </div>

@@ -4,9 +4,6 @@ import BlogDetails from "./components/home/BlogDetails";
 import EcommerceLanding from "./pages/EcommerceLanding";
 import RegistrationForm from "./pages/RegistrationForm";
 import LoginPage from "./pages/LoginPage";
-import Counter from "./pages/Users";
-import Users from "./pages/Users";
-import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 
 
@@ -30,4 +27,4 @@ function App() {
 
 export default App;
 
-// robiulhassanrobi@gmail.com
+

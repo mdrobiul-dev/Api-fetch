@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Cookie utility functions
 const setCookie = (name, value, days) => {
   const expires = new Date();
   expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -29,9 +28,9 @@ const api = axios.create({
   },
 });
 
+
 api.interceptors.request.use(
   (config) => {
-    
     const token = localStorage.getItem("accessToken") || getCookie("accessToken");
     
     if (token) {
@@ -44,11 +43,13 @@ api.interceptors.request.use(
   }
 );
 
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
+ 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       
@@ -56,21 +57,33 @@ api.interceptors.response.use(
         const refreshToken = localStorage.getItem("refreshToken") || getCookie("refreshToken");
         
         if (refreshToken) {
-   
-          const refreshResponse = await api.post("/auth/refresh", { refreshToken });
-          const newAccessToken = refreshResponse.data.accessToken;
+         
+          const refreshResponse = await api.post("/users/refresh-token", { 
+            refreshToken: refreshToken 
+          });
           
-       
-          localStorage.setItem("accessToken", newAccessToken);
-          setCookie("accessToken", newAccessToken, 1);
-          
-     
-          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          const { accessToken, refreshToken: newRefreshToken } = refreshResponse.data;
+
+        
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", newRefreshToken);
+
+          setCookie("accessToken", accessToken, 1); 
+          setCookie("refreshToken", newRefreshToken, 7); 
+
+         
+          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           return api(originalRequest);
+        } else {
+         
+          logoutUser();
+          window.location.href = '/login';
         }
       } catch (refreshError) {
+        console.error('Refresh token error:', refreshError);
      
         logoutUser();
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }
@@ -79,15 +92,60 @@ api.interceptors.response.use(
   }
 );
 
-
 const logoutUser = () => {
- 
+  // Clear localStorage
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   localStorage.removeItem("user");
   
+  // Clear cookies
   deleteCookie("accessToken");
   deleteCookie("refreshToken");
+};
+
+
+export const validateToken = () => {
+  const token = localStorage.getItem("accessToken") || getCookie("accessToken");
+  if (!token) return false;
+
+  try {
+   
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const isExpired = payload.exp * 1000 < Date.now();
+    return !isExpired;
+  } catch (error) {
+    console.error('Token validation error:', error);
+    return false;
+  }
+};
+
+
+export const refreshTokens = async () => {
+  try {
+    const refreshToken = localStorage.getItem("refreshToken") || getCookie("refreshToken");
+    
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+
+    const response = await api.post("/users/refresh-token", { 
+      refreshToken: refreshToken 
+    });
+
+    const { accessToken, refreshToken: newRefreshToken } = response.data;
+
+    
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshToken", newRefreshToken);
+    setCookie("accessToken", accessToken, 1);
+    setCookie("refreshToken", newRefreshToken, 7);
+
+    return { accessToken, refreshToken: newRefreshToken };
+  } catch (error) {
+    console.error('Manual token refresh failed:', error);
+    logoutUser();
+    throw error;
+  }
 };
 
 export const blogservices = {
@@ -110,11 +168,14 @@ export const authservices = {
     const res = await api.post("/users/login", userData);
     return res.data;
   },
+  refreshToken: async (refreshToken) => {
+    const res = await api.post("/users/refresh-token", { refreshToken });
+    return res.data;
+  },
   logout: async () => {
     logoutUser();
     return { success: true, message: "Logged out successfully" };
   }
 };
 
-// Export cookie utilities if needed elsewhere
-export { setCookie, getCookie, deleteCookie, logoutUser };  
+export { setCookie, getCookie, deleteCookie, logoutUser };
